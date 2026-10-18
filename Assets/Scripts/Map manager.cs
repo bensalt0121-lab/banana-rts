@@ -1,0 +1,82 @@
+using NUnit.Framework.Constraints;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+using UnityEngine.UIElements;
+
+public class Mapmanager : MonoBehaviour
+{
+    public static Mapmanager instance;
+    public Tilemap tilemap;
+    public List<Tile> tiles = new List<Tile>();
+
+    public int width, height;
+    public Maptile[ , ] Map ;
+    
+    public enum tiletypes 
+    {
+        grass = 0,
+        water = 1,
+    };
+    void Start()
+    {
+        
+        if(instance != null)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            instance = this;
+        }
+        //map generation
+        Map = new Maptile[width, height];
+        float xoff = Random.Range(1, 1000000);
+        float yoff = Random.Range(1, 100000);
+
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                float sample = Mathf.PerlinNoise((float)i / width + xoff, (float)j / height + yoff);
+                
+                if (sample <= 0.3)
+                {
+                    //water
+                    Map[i, j] = new Maptile(tiletypes.water);
+                } else
+                {
+                    //grass
+                    Map[i, j] = new Maptile(tiletypes.grass);
+                }
+            }
+        }
+
+        
+        UpdateTilemap();
+    }
+    /// <summary>
+    /// Updates the Tilemap's sprites
+    /// </summary>
+    public void UpdateTilemap()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            for (int j = 0; j < height; j++)
+            {
+                tilemap.SetTile(new Vector3Int(i, j, 0), tiles[(int)Map[i, j].type]); 
+            }
+        }
+    }
+
+    public void placing()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+}
