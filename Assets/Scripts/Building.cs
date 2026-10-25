@@ -1,14 +1,14 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Building : MonoBehaviour
 {
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public Vector2Int[] The_offset_of_tiles;
     void Start()
     {
         
     }
-
+    
     // Update is called once per frame
     void Update()
     {
